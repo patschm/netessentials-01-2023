@@ -16,10 +16,13 @@ internal class Program
         //Semaphoring();
         //Blocking();
         //CountDown();
-        GreatBarrier();
+        //GreatBarrier();
+        Veeltaken();
         Console.WriteLine("Back to main!!!");
         Console.ReadLine();
     }
+
+   
 
     private static void Synchronous()
     {
@@ -68,13 +71,14 @@ internal class Program
     private static void AsynchronousCancelling()
     {
         var nikko = new CancellationTokenSource();
-        var token = nikko.Token;
+        var bommetje = nikko.Token;
+
         Task.Run(() => { 
             for(var x = 0; x < 100; x++)
             {
                 Task.Delay(1000).Wait();
                 Console.WriteLine($"Iteration {x}"); 
-                if (token.IsCancellationRequested) 
+                if (bommetje.IsCancellationRequested) 
                 {
                     Console.WriteLine("Cancelling...");
                     return;
@@ -107,6 +111,7 @@ internal class Program
 
     static int counter = 0;
     static object stick = new object();
+
     private static void Locking()
     {      
         Parallel.For(0, 10, x => {
@@ -186,5 +191,22 @@ internal class Program
         }
 
         Console.WriteLine("And we continue");
+    }
+    private static void Veeltaken()
+    {
+        var rnd = new Random();
+        Task<int>[] taken = new Task<int>[10];
+        for(int i = 0; i < 10;i++)
+        {
+            taken[i] = Task.Run<int>(() => {
+                Task.Delay(1000 + rnd.Next(100, 300)).Wait();
+                return 10;
+            });
+        }
+
+        Task.WaitAny(taken);
+        Console.WriteLine("We zijn klaar");
+        int result = taken.Select(t => t.Result).Sum();
+        Console.WriteLine(result);
     }
 }

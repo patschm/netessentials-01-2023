@@ -44,7 +44,7 @@ public class Program
         {
             opts.BaseAddress = new Uri("https://localhost:8001/");
         })
-            .SetHandlerLifetime(TimeSpan.FromMinutes(5)) // Default is 10 minutes
+            .SetHandlerLifetime(TimeSpan.FromMinutes(5)) // Default is 2 minutes
             .AddPolicyHandler(msg =>
             { 
                 // Retry mechanisms
@@ -71,12 +71,12 @@ public class Program
         var factory = new DefaultServiceProviderFactory();
         var services = new ServiceCollection();
         var builder = factory.CreateBuilder(services);
-        builder.AddHttpClient<WeatherForecastService>(opts =>
+        builder.AddHttpClient<WeatherForecastProxy>(opts =>
         {
             opts.BaseAddress = new Uri("https://localhost:8001/");
         });
         var provider = builder.BuildServiceProvider();
-        var service = provider.GetService<WeatherForecastService>();
+        var service = provider.GetService<WeatherForecastProxy>();
         var result = service?.GetWeather();
         if (result != null)
             foreach (var item in result)

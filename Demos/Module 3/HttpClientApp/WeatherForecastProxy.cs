@@ -2,11 +2,11 @@ using Newtonsoft.Json;
 
 namespace HttpClientApp;
 
-public class WeatherForecastService
+public class WeatherForecastProxy
 {
     private readonly HttpClient _httpClient;
 
-    public WeatherForecastService(HttpClient httpClient)
+    public WeatherForecastProxy(HttpClient httpClient)
     {
         _httpClient = httpClient;
     }
