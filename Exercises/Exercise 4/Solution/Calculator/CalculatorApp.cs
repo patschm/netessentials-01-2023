@@ -22,7 +22,8 @@ namespace Calculator
                 //       //UpdateAnswer(pt.Result);
 
                 //        });
-                int result = await DoTheAdd(a, b);//.ConfigureAwait(false);
+                int result = await DoTheAdd(a, b);
+                //int result = DoTheAdd(a, b).Result;//Dead Lock
                 UpdateAnswer(result);
             }    
         }
@@ -31,7 +32,6 @@ namespace Calculator
         {
             int result = await LongAddAsync(a, b);
             return result;
-            //return LongAddAsync(a, b).Result;  // Dead lock
         }
         private void UpdateAnswer(object result)
         {
