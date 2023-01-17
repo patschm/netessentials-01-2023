@@ -16,15 +16,16 @@ namespace Confidentiality
             string msg = "Hello World";
             Aes alg = Aes.Create();
             byte[] key = alg.Key;
+            byte[] iv = alg.IV;
 
             byte[] cipher;
             using (MemoryStream str = new MemoryStream())
             {
                 using CryptoStream cr = new CryptoStream(str, alg.CreateEncryptor(), CryptoStreamMode.Write);
                 {
-                    StreamWriter writer = new StreamWriter(cr);
+                    using (StreamWriter writer = new StreamWriter(cr))
                     {
-                        writer.WriteLine(msg);                
+                        writer.WriteLine(msg);
                     }
                 }    
                 cipher = str.ToArray();  
@@ -34,6 +35,7 @@ namespace Confidentiality
             // Ontvanger
             Aes alg2 = Aes.Create();
             alg2.Key = key;
+            alg2.IV = iv;
             using(MemoryStream str = new MemoryStream(cipher))
             {
                 using (CryptoStream cr = new CryptoStream(str, alg2.CreateDecryptor(), CryptoStreamMode.Read))
